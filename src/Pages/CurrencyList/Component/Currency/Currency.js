@@ -45,6 +45,3 @@ export default function Currency({ data }) {
     </>
   );
 }
-
-// onclick 이벤트 함수
-//(e) => {if (e.target.id !== data.name) return; setApiData([...data, {...el, isClicked: true}])}

@@ -1,0 +1,13 @@
+.SelectBox {
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  > button {
+    margin-left: 20px;
+    font-size: 12px;
+    font-weight: bolder;
+    color: #696969;
+    cursor: pointer;
+  }
+}
