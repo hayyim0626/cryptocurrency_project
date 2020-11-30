@@ -1,4 +1,4 @@
-.ProductList {
+.CurrencyList {
   width: 900px;
   margin: 0 auto;
   .lists {
@@ -43,64 +43,36 @@
   .productInfoBox {
     display: flex;
     align-items: center;
-    justify-content: space-between;
     height: 30px;
-    padding: 0 20px;
+    padding: 0 30px;
     font-size: 10px;
     font-weight: bold;
     background-color: #e8e8e8;
-  }
-  .currency {
-    display: flex;
-    align-items: center;
-    padding: 0 20px;
-    height: 40px;
-    border-bottom: 1px solid #dcdcdc;
-    &:hover {
-      background: #f5f5f5;
+    :nth-child(1) {
+      width: 39%;
     }
-    .name {
-      width: 25%;
-      font-size: 13px;
-      font-weight: bold;
+    :nth-child(2) {
+      width: 13.5%;
     }
-    .symbol {
-      width: 10%;
-      font-size: 10px;
-      font-weight: bold;
-      color: gray;
+    :nth-child(3) {
+      width: 12%;
     }
-    .price {
+    :nth-child(4) {
+      width: 13%;
+    }
+    :nth-child(5) {
       width: 15%;
-      text-align: right;
-      font-size: 12px;
-      font-weight: bold;
-    }
-    .dayperPlus {
-      width: 15%;
-      text-align: right;
-      color: blue;
-      font-size: 12px;
-      font-weight: bold;
-    }
-    .dayperMinus {
-      width: 15%;
-      text-align: right;
-      color: red;
-      font-size: 12px;
-      font-weight: bold;
-    }
-    .volume {
-      width: 40%;
-      text-align: right;
-      font-size: 12px;
-      font-weight: bold;
     }
   }
   .moreCurrency {
     padding: 0 20px;
-    display: flex;
-    align-items: center;
-    height: 40px;
+    text-align: center;
+    line-height: 40px;
+    margin-bottom: 100px;
+    border-bottom: 1px solid #dcdcdc;
+    font-size: 10px;
+    font-weight: bolder;
+    color: gray;
+    cursor: pointer;
   }
 }
