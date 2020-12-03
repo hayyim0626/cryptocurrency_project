@@ -2,43 +2,43 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./Currency.scss";
 
-export default function Currency({ data }) {
-  const [isClicked, setisClicked] = useState([]);
-
-  const handleClick = (idx) => {
-    const currencyNum = idx + 1;
-    if (isClicked.includes(currencyNum)) {
-      isClicked.splice(isClicked.indexOf(currencyNum), 1);
-      return setisClicked([...isClicked]);
-    } else {
-      return setisClicked([...isClicked, currencyNum]);
-    }
-  };
-
+export default function Currency({ apiData }) {
+  const [selectCurrency, setSelectCurrency] = useState([]);
+  // const handleClick = (idx) => {
+  //   if (selectCurrency.includes(apiData[idx])) {
+  //     selectCurrency.splice(selectCurrency.indexOf(apiData[idx]), 1);
+  //     return setSelectCurrency([...selectCurrency]);
+  //   } else {
+  //     setSelectCurrency([...selectCurrency, apiData[idx]]);
+  //   }
+  //   // saveLocalStorage(idx);  여기서부터 다시 시작하기
+  // };
   return (
     <>
-      {data.map((el, idx) => {
+      {apiData.map((data, idx) => {
         return (
           <ul className="currency" key={idx}>
             <button
-              className={isClicked.includes(idx + 1) ? "star isClicked" : "star"}
-              onClick={() => handleClick(idx)}
+              className={
+                selectCurrency.includes(data) ? "star isClicked" : "star"
+              }
+              // onClick={() => handleClick(idx)}
             >
               ★
             </button>
-            <li className="name">{el.name}</li>
-            <li className="symbol">{el.symbol}</li>
-            <li className="price">{el.price}</li>
-            <li className={el.hourPer.includes("-") ? "minusPer" : "plusPer"}>
-              {el.hourPer}%
+            <li className="name">{data.name}</li>
+            <li className="symbol">{data.symbol}</li>
+            <li className="price">{data.price}</li>
+            <li className={data.hourPer.includes("-") ? "minusPer" : "plusPer"}>
+              {data.hourPer}%
             </li>
-            <li className={el.dayPer.includes("-") ? "minusPer" : "plusPer"}>
-              {el.dayPer}%
+            <li className={data.dayPer.includes("-") ? "minusPer" : "plusPer"}>
+              {data.dayPer}%
             </li>
-            <li className={el.weekPer.includes("-") ? "minusPer" : "plusPer"}>
-              {el.weekPer}%
+            <li className={data.weekPer.includes("-") ? "minusPer" : "plusPer"}>
+              {data.weekPer}%
             </li>
-            <li className="volume">{el.volume}</li>
+            <li className="volume">{data.volume}</li>
           </ul>
         );
       })}

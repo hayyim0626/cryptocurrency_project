@@ -3,11 +3,12 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  > button {
-    margin-left: 20px;
+  .selectType {
+    margin-left: 10px;
     font-size: 12px;
     font-weight: bolder;
     color: #696969;
+    border: none;
     cursor: pointer;
   }
 }
