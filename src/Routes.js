@@ -2,16 +2,20 @@ import React from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import BookMark from "./Pages/Bookmark/Bookmark";
 import CurrencyList from "./Pages/CurrencyList/CurrencyList";
-import ProductDeatail from "./Pages/ProductDetail/ProductDetail";
+import CurrencyDeatail from "./Pages/CurrencyDetail/CurrencyDetail";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-export default function Routes () {
+export default function Routes() {
   return (
     <Router>
-      <Switch>
-        <Route exact path="/bookmark" component={BookMark} />
-        <Route exact path="/currencylist" component={CurrencyList} />
-        <Route exact path="/productdetail" component={ProductDeatail} />
-      </Switch>
+      <ToastContainer />
+        <Switch>
+          <Route exact path="/bookmark" component={BookMark} />
+          <Route exact path="/currencylist" component={CurrencyList} />
+          <Route exact path="/currencydetail" component={CurrencyDeatail} />
+          <Route exact path="/currencydetail/:id" component={CurrencyDeatail} />
+        </Switch>
     </Router>
-  )
+  );
 }
