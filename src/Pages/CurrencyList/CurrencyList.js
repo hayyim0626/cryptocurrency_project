@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
@@ -15,43 +15,51 @@ export default function CurrencyList() {
   const dispatch = useDispatch();
   const history = useHistory();
   const state = useSelector((store) => store.currencyReducer);
+  const [vsCurrency, setVsCurrency] = useState("krw");
+  const [perPage, setPerPage] = useState("50");
+  const [page, setPage] = useState(1);
+  const basicUrl = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${vsCurrency}&per_page=${perPage}&page=${page}&sparkline=false&price_change_percentage=1h%2C24h%2C7d`;
 
   const getApiData = async () => {
     setLoading(true);
     try {
-      const basicUrl = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=krw&per_page=50&page=1&sparkline=false&price_change_percentage=1h%2C24h%2C7d`;
       const response = await axios.get(basicUrl);
-      const apiData = response.data.map((el) => ({
-        id: el.id,
-        name: el.name,
-        symbol: el.symbol.toUpperCase(),
-        price: el.current_price.toLocaleString("ko-KR", {
-          style: "currency",
-          currency: "KRW",
-          maximumFractionDigits: 2,
-        }),
-        hourPer: el.price_change_percentage_1h_in_currency.toFixed(1),
-        dayPer: el.price_change_percentage_24h_in_currency.toFixed(1),
-        weekPer: el.price_change_percentage_7d_in_currency.toFixed(1),
-        volume: el.total_volume.toLocaleString("ko-KR", {
-          style: "currency",
-          currency: "KRW",
-        }),
-        rank: el.market_cap_rank,
-      }));
-      setApiData(apiData.sort((a, b) => a.rank - b.rank));
+      const currencyData = response.data
+        .map((el) => ({
+          id: el.id,
+          name: el.name,
+          symbol: el.symbol.toUpperCase(),
+          price: el.current_price,
+          hourPer: Number(el.price_change_percentage_1h_in_currency).toFixed(1),
+          dayPer: Number(el.price_change_percentage_24h_in_currency).toFixed(1),
+          weekPer: Number(el.price_change_percentage_7d_in_currency).toFixed(1),
+          volume: el.total_volume,
+          rank: el.market_cap_rank,
+        }))
+        .sort((a, b) => a.rank - b.rank);
+      setApiData(...apiData, currencyData);
       setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
+
   useEffect(() => {
     getApiData();
   }, []);
 
-  const handleClick = (idx) => {
-    if (state.includes(apiData[idx])) {
-      const remainCurrency = state.filter((i) => i !== apiData[idx]);
+  useEffect(() => {
+    getApiData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [vsCurrency, perPage, page]);
+  console.log(apiData);
+  const handleClick = (id, idx) => {
+    if (
+      state.find((data) => {
+        return data.id === id;
+      })
+    ) {
+      const remainCurrency = state.filter((i) => i.id !== id);
       dispatch(deleteCurrency(remainCurrency));
       toast.info("북마크가 해제되었습니다", {
         position: "top-right",
@@ -66,6 +74,10 @@ export default function CurrencyList() {
     }
   };
 
+  const fetchMoreCurrency = () => {
+    setPage(page + 1);
+  };
+
   return (
     <>
       {loading ? (
@@ -76,7 +88,13 @@ export default function CurrencyList() {
             <div className="priceList">가상자산 시세 목록</div>
             <div className="bookMarkList">북마크 목록</div>
           </h3>
-          <SelectBox />
+          <SelectBox
+            perPage={perPage}
+            vsCurrency={vsCurrency}
+            setVsCurrency={setVsCurrency}
+            setPerPage={setPerPage}
+            getApiData={getApiData}
+          />
           <CurrencyInfoBox />
           <div>
             {apiData.map((data, idx) => {
@@ -85,23 +103,34 @@ export default function CurrencyList() {
                   <div>
                     <button
                       className={
-                        state.includes(data) ? "star isClicked" : "star"
+                        state.find((currency) => currency.id === data.id)
+                          ? "star isClicked"
+                          : "star"
                       }
-                      onClick={() => handleClick(idx)}
+                      onClick={() => handleClick(data.id, idx)}
                     >
                       ★
                     </button>
                     {/* <ToastContainer /> */}
                   </div>
-                  <li
+                  <Link
                     className="name"
-                    id={data.name}
-                    onClick={() => history.push(`/currencydetail/${data.id}`)}
+                    to={`/currencydetail/${data.id}`}
                   >
                     {data.name}
-                  </li>
+                  </Link>
                   <li className="symbol">{data.symbol}</li>
-                  <li className="price">{data.price}</li>
+                  <li className="price">
+                    {vsCurrency === "usd"
+                      ? data.price.toLocaleString("en-US", {
+                          style: "currency",
+                          currency: "USD",
+                        })
+                      : data.price.toLocaleString("ko-KR", {
+                          style: "currency",
+                          currency: "KRW",
+                        })}
+                  </li>
                   <li
                     className={
                       data.hourPer.includes("-") ? "minusPer" : "plusPer"
@@ -123,40 +152,26 @@ export default function CurrencyList() {
                   >
                     {data.weekPer}%
                   </li>
-                  <li className="volume">{data.volume}</li>
+                  <li className="volume">
+                    {vsCurrency === "usd"
+                      ? data.volume.toLocaleString("en-US", {
+                          style: "currency",
+                          currency: "USD",
+                        })
+                      : data.volume.toLocaleString("ko-KR", {
+                          style: "currency",
+                          currency: "KRW",
+                        })}
+                  </li>
                 </ul>
               );
             })}
           </div>
-          <div className="moreCurrency">+더보기</div>
+          <div className="moreCurrency" onClick={() => fetchMoreCurrency()}>
+            +더보기
+          </div>
         </div>
       )}
     </>
   );
 }
-
-// const [apiData, setApiData] = useState({ ...SET_API, SET_API });
-// const page = ["전체보기", "북마크보기"];
-// const vsCurrency = { 0: "krw", 1: "usd" };
-// const perPage = { 0: 10, 1: 30, 2: 50 };
-// const [loading, setLoading] = useState(false);
-// const SET_API = {
-//   vsCurrency: ["krw", "usd"],
-//   perPage: [10, 30, 50],
-//   moreCurrency: function () {
-//     let page = 1;
-//     page = page + 1;
-//     return page;
-//   },
-// };
-
-//----------클릭에 따라서 붙는게 달라진다.
-// .toLocaleString("ko-KR", {
-//   style: "currency",
-//   currency: "KRW",
-// }),
-
-// .toLocaleString("en-US", {
-//   style: "currency",
-//   currency: "USD",
-// }),
