@@ -12,11 +12,11 @@ CRA 초기세팅 과정부터 github을 통한 버전 관리 최신화, 모든 �
 
 ## 🔧 기술 스택
 **- JavaScript(ES6+)**<br>
-**- React hooks**
-**- SCSS**
-**- Github**
-**- Redux**
-**- React toastify**
+**- React hooks**<br>
+**- SCSS**<br>
+**- Github**<br>
+**- Redux**<br>
+**- React toastify**<br>
 
 
 ## 💻 기능 구현
