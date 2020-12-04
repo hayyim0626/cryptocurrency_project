@@ -1,3 +1,113 @@
 .CurrencyDetail {
-  
+  width: 900px;
+  margin: 0 auto;
+  margin-top: 100px;
+  header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 40px;
+    .currencyInfo {
+      display: flex;
+      .star {
+        line-height: 30px;
+        margin-right: 10px;
+        font-size: 20px;
+        color: gray;
+        cursor: pointer;
+        &.isClicked {
+          color: #ffc40c;
+        }
+      }
+      .currencyLogo {
+        width: 30px;
+        margin-right: 10px;
+      }
+      .currencyName {
+        display: flex;
+        h2 {
+          line-height: 30px;
+          margin-right: 5px;
+        }
+      }
+    }
+    .selectType {
+      font-size: 12px;
+      font-weight: bolder;
+      color: #696969;
+      border: none;
+      cursor: pointer;
+    }
+  }
+  .detailInfo {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    // article: nth-child(1) {
+
+    // }
+    .infoBox {
+      border: 1px solid #c8c8c8;
+      display: flex;
+      height: 50px;
+      .infoTitle {
+        width: 120px;
+        line-height: 50px;
+        padding: 0 10px;
+        background-color: #e8e8e8;
+        font-size: 15px;
+        font-weight: bold;
+      }
+      .infoContents {
+        width: 300px;
+        line-height: 50px;
+        padding: 0 10px;
+        font-size: 13px;
+        font-weight: bold;
+      }
+    }
+    .currentPrice {
+      font-size: 25px;
+      margin-bottom: 30px;
+      div {
+        text-align: end;
+        font-weight: bold;
+      }
+    }
+    .currencyVolume {
+      display: flex;
+      text-align: right;
+      .marketCap {
+        width: 200px;
+        height: 50px;
+        font-size: 13px;
+      }
+      .dayVolume {
+        width: 200px;
+        height: 50px;
+        font-size: 13px;
+      }
+    }
+  }
+  .priceCalculation {
+    display: block;
+    margin-bottom: 20px;
+    height: 200px;
+    background-color: #e8e8e8;
+  }
+  .description {
+    .seeDescription {
+      display: block;
+      height: 30px;
+      text-align: center;
+      margin-bottom: 15px;
+      border-bottom: 1px solid black;
+      cursor: pointer;
+    }
+    .clicked {
+      white-space: pre-wrap;
+    }
+    .notClicked {
+      display: none;
+    }
+  }
 }
