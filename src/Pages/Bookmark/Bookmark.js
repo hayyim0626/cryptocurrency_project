@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import React from "react";
 import { toast } from "react-toastify";
 import CurrencyInfoBox from "../../Components/CurrencyInfoBox/CurrencyInfoBox";
 import { useSelector, useDispatch } from "react-redux";

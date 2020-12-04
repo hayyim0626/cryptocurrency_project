@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
 import { toast } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
 import { addCurrency, deleteCurrency } from "../../Store/actions/";
 import SelectBox from "./Component/SelectBox/SelectBox";
 import CurrencyInfoBox from "../../Components/CurrencyInfoBox/CurrencyInfoBox";
@@ -10,6 +10,7 @@ import Loader from "../../Components/Loader/Loader";
 import "./CurrencyList.scss";
 
 export default function CurrencyList() {
+  const arr = [];
   const [apiData, setApiData] = useState([]);
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
@@ -37,8 +38,13 @@ export default function CurrencyList() {
           rank: el.market_cap_rank,
         }))
         .sort((a, b) => a.rank - b.rank);
-      setApiData(...apiData, currencyData);
+      if (page === 1) {
+        setApiData(currencyData);
+      } else {
+        setApiData(...apiData, ...currencyData);
+      }
       setLoading(false);
+      return;
     } catch (error) {
       console.log(error);
     }
@@ -52,7 +58,6 @@ export default function CurrencyList() {
     getApiData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vsCurrency, perPage, page]);
-  console.log(apiData);
   const handleClick = (id, idx) => {
     if (
       state.find((data) => {
@@ -113,10 +118,7 @@ export default function CurrencyList() {
                     </button>
                     {/* <ToastContainer /> */}
                   </div>
-                  <Link
-                    className="name"
-                    to={`/currencydetail/${data.id}`}
-                  >
+                  <Link className="name" to={`/currencydetail/${data.id}`}>
                     {data.name}
                   </Link>
                   <li className="symbol">{data.symbol}</li>
@@ -161,6 +163,7 @@ export default function CurrencyList() {
                       : data.volume.toLocaleString("ko-KR", {
                           style: "currency",
                           currency: "KRW",
+                          maximumFractionDigits: 2,
                         })}
                   </li>
                 </ul>
