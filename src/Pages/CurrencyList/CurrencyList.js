@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,15 +10,13 @@ import Loader from "../../Components/Loader/Loader";
 import "./CurrencyList.scss";
 
 export default function CurrencyList() {
-  const arr = [];
   const [apiData, setApiData] = useState([]);
   const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
-  const history = useHistory();
-  const state = useSelector((store) => store.currencyReducer);
   const [vsCurrency, setVsCurrency] = useState("krw");
   const [perPage, setPerPage] = useState("50");
   const [page, setPage] = useState(1);
+  const dispatch = useDispatch();
+  const state = useSelector((store) => store.currencyReducer);
   const basicUrl = `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${vsCurrency}&per_page=${perPage}&page=${page}&sparkline=false&price_change_percentage=1h%2C24h%2C7d`;
 
   const getApiData = async () => {
@@ -38,32 +36,28 @@ export default function CurrencyList() {
           rank: el.market_cap_rank,
         }))
         .sort((a, b) => a.rank - b.rank);
-      if (page === 1) {
-        setApiData(currencyData);
-      } else {
-        setApiData(...apiData, ...currencyData);
-      }
+      console.log(currencyData);
+      page === 1
+        ? setApiData(currencyData)
+        : setApiData([...apiData, ...currencyData])
       setLoading(false);
-      return;
     } catch (error) {
       console.log(error);
     }
   };
+  console.log(apiData);
+  console.log(basicUrl);
 
   useEffect(() => {
     getApiData();
   }, []);
-
   useEffect(() => {
     getApiData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vsCurrency, perPage, page]);
+
   const handleClick = (id, idx) => {
-    if (
-      state.find((data) => {
-        return data.id === id;
-      })
-    ) {
+    if (state.find((data) => data.id === id)) {
       const remainCurrency = state.filter((i) => i.id !== id);
       dispatch(deleteCurrency(remainCurrency));
       toast.info("북마크가 해제되었습니다", {
@@ -91,7 +85,9 @@ export default function CurrencyList() {
         <div className="CurrencyList">
           <h3 className="lists">
             <div className="priceList">가상자산 시세 목록</div>
-            <div className="bookMarkList">북마크 목록</div>
+            <Link to="/bookmark" className="bookMarkList">
+              북마크 목록
+            </Link>
           </h3>
           <SelectBox
             perPage={perPage}
@@ -99,6 +95,7 @@ export default function CurrencyList() {
             setVsCurrency={setVsCurrency}
             setPerPage={setPerPage}
             getApiData={getApiData}
+            setPage={setPage}
           />
           <CurrencyInfoBox />
           <div>
@@ -116,7 +113,6 @@ export default function CurrencyList() {
                     >
                       ★
                     </button>
-                    {/* <ToastContainer /> */}
                   </div>
                   <Link className="name" to={`/currencydetail/${data.id}`}>
                     {data.name}

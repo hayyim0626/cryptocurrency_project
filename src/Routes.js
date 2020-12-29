@@ -12,8 +12,7 @@ export default function Routes() {
       <ToastContainer />
         <Switch>
           <Route exact path="/bookmark" component={BookMark} />
-          <Route exact path="/currencylist" component={CurrencyList} />
-          <Route exact path="/currencydetail" component={CurrencyDeatail} />
+          <Route exact path="/" component={CurrencyList} />
           <Route exact path="/currencydetail/:id" component={CurrencyDeatail} />
         </Switch>
     </Router>

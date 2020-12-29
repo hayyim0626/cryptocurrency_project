@@ -1,5 +1,6 @@
 import React from "react";
 import { toast } from "react-toastify";
+import { Link } from "react-router-dom";
 import CurrencyInfoBox from "../../Components/CurrencyInfoBox/CurrencyInfoBox";
 import { useSelector, useDispatch } from "react-redux";
 import { deleteCurrency } from "../../Store/actions/";
@@ -21,7 +22,9 @@ export default function Bookmark() {
   return (
     <div className="Bookmark">
       <h3 className="lists">
-        <div className="priceList">가상자산 시세 목록</div>
+        <Link to="/" className="priceList">
+          가상자산 시세 목록
+        </Link>
         <div className="bookMarkList">북마크 목록</div>
       </h3>
       <CurrencyInfoBox />
@@ -35,7 +38,7 @@ export default function Bookmark() {
             >
               ★
             </button>
-            <li className="name">{data.name}</li>
+            <Link className="name" to={`/currencydetail/${data.id}`}>{data.name}</Link>
             <li className="symbol">{data.symbol}</li>
             <li className="price">{data.price}</li>
             <li className={data.hourPer.includes("-") ? "minusPer" : "plusPer"}>
