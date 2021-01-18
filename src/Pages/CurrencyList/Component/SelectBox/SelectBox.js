@@ -7,7 +7,7 @@ export default function SelectBox({
   setPerPage,
   perPage,
   vsCurrency,
-  setPage
+  setPage,
 }) {
   const CURRENT_PAGE = ["전체보기", "북마크보기"];
   const VS_CURRENCY = ["KRW 보기", "USD 보기"];
@@ -23,9 +23,17 @@ export default function SelectBox({
     setVsCurrency(e.target.value.slice(0, 3).toLowerCase());
   };
 
+  // const handlePerPageApi = (e) => {
+  //   setPerPage(e.target.value.slice(0, 2));
+  //   setPage(1);
+  // };
+
   const handlePerPageApi = (e) => {
+    if (e.target.value.slice(0, 2) !== perPage) {
+      setPerPage(e.target.value.slice(0, 2));
+      setPage(1);
+    }
     setPerPage(e.target.value.slice(0, 2));
-    setPage(1)
   };
 
   return (
@@ -39,7 +47,9 @@ export default function SelectBox({
         {VS_CURRENCY.map((el, idx) => (
           <option
             key={idx}
-            selected={vsCurrency === el.slice(0, 3).toLowerCase() ? "selected" : ""}
+            selected={
+              vsCurrency === el.slice(0, 3).toLowerCase() ? "selected" : ""
+            }
             value={el}
           >
             {el}

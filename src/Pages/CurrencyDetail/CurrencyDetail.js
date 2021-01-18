@@ -8,9 +8,11 @@ export default function CurrencyDetail({ match }) {
   const [loading, setLoading] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const [vsCurrency, setVsCurrency] = useState("krw");
+  // const [seeDescription, setSeeDescription] = useState(["▼", "▲"])
   const VS_CURRENCY = ["KRW 보기", "USD 보기"];
   const coinId = match.params.id;
   // const description = currencyData.description;
+  
   const handleVsCurrency = (e) => {
     setVsCurrency(e.target.value.slice(0, 3).toLowerCase());
   };
@@ -29,9 +31,9 @@ export default function CurrencyDetail({ match }) {
         website: response.data.links.homepage[0],
         price: response.data.market_data.current_price,
         hourPer:
-          response.data.market_data.price_change_percentage_1h_in_currency, 
-        marketCap: response.data.market_data.market_cap, 
-        totalVolume: response.data.market_data.total_volume, 
+          response.data.market_data.price_change_percentage_1h_in_currency,
+        marketCap: response.data.market_data.market_cap,
+        totalVolume: response.data.market_data.total_volume,
         description: response.data.description,
       };
       setCurrencyData(apiData);
@@ -40,10 +42,12 @@ export default function CurrencyDetail({ match }) {
       console.log(error);
     }
   };
+
   useEffect(() => {
     getApiData();
   }, []);
 
+  console.log(currencyData.description);
   return (
     <>
       {loading ? (
@@ -125,10 +129,11 @@ export default function CurrencyDetail({ match }) {
               설명보기 ▼
             </article>
             <article className={isClicked ? "clicked" : "notClicked"}>
-              {currencyData.description?.ko}
-              {/* {description.hasOwnProperty("ko")
+              {currencyData.description?.ko
                 ? currencyData.description?.ko
-                : currencyData.description?.en} */}
+                : currencyData.description?.en
+                ? currencyData.description?.en
+                : "설명이 존재하지 않습니다."}
             </article>
           </content>
         </div>

@@ -36,21 +36,19 @@ export default function CurrencyList() {
           rank: el.market_cap_rank,
         }))
         .sort((a, b) => a.rank - b.rank);
-      console.log(currencyData);
       page === 1
         ? setApiData(currencyData)
-        : setApiData([...apiData, ...currencyData])
+        : setApiData([...apiData, ...currencyData]);
       setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
-  console.log(apiData);
-  console.log(basicUrl);
 
   useEffect(() => {
     getApiData();
   }, []);
+
   useEffect(() => {
     getApiData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -169,6 +167,7 @@ export default function CurrencyList() {
           <div className="moreCurrency" onClick={() => fetchMoreCurrency()}>
             +더보기
           </div>
+          <div className='nth' />
         </div>
       )}
     </>
