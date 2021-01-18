@@ -8,11 +8,10 @@ export default function CurrencyDetail({ match }) {
   const [loading, setLoading] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const [vsCurrency, setVsCurrency] = useState("krw");
-  // const [seeDescription, setSeeDescription] = useState(["▼", "▲"])
   const VS_CURRENCY = ["KRW 보기", "USD 보기"];
   const coinId = match.params.id;
-  // const description = currencyData.description;
-  
+  const [seeDescription, setSeeDescription] = useState(["▲", "▼"]);
+
   const handleVsCurrency = (e) => {
     setVsCurrency(e.target.value.slice(0, 3).toLowerCase());
   };
@@ -47,7 +46,8 @@ export default function CurrencyDetail({ match }) {
     getApiData();
   }, []);
 
-  console.log(currencyData.description);
+  // console.log(currencyData.hourPer);
+  console.log(currencyData.hourPer?.krw);
   return (
     <>
       {loading ? (
@@ -106,15 +106,45 @@ export default function CurrencyDetail({ match }) {
                         currency: "USD",
                       })}
                 </div>
-                <span>{currencyData.hourPer?.ethereum}</span>
+                <div
+                  className={
+                    Number(currencyData.hourPer?.krw).toFixed(1).includes("-")
+                      ? "minusPer"
+                      : "plusPer"
+                  }
+                >
+                  {vsCurrency === "krw"
+                    ? Number(currencyData.hourPer?.krw).toFixed(1)
+                    : Number(currencyData.hourPer?.usd).toFixed(1)}
+                  %
+                </div>
               </div>
               <div className="currencyVolume">
                 <div className="marketCap">
-                  <div className="">시가총액</div>
-                  {/* <div className="">{currencyData.marketCap[currencyData.symbol.toLowerCase()]}</div> */}
+                  <div className="marketCapText">시가총액</div>
+                  <div className="marketCapData">
+                    {vsCurrency === "krw"
+                      ? currencyData.marketCap?.krw.toLocaleString("ko-KR", {
+                          style: "currency",
+                          currency: "KRW",
+                        })
+                      : currencyData.marketCap?.usd.toLocaleString("en-US", {
+                          style: "currency",
+                          currency: "USD",
+                        })}
+                  </div>
                 </div>
                 <div className="dayVolume">
-                  <div className="">24시간 거래대금</div>
+                  <div className="dayVolumeText">24시간 거래대금</div>
+                  {vsCurrency === "krw"
+                    ? currencyData.totalVolume?.krw.toLocaleString("ko-KR", {
+                        style: "currency",
+                        currency: "KRW",
+                      })
+                    : currencyData.totalVolume?.usd.toLocaleString("en-US", {
+                        style: "currency",
+                        currency: "USD",
+                      })}
                   {/* <div className="">{currencyData.totalVolume[currencyData.symbol.toLowerCase()]}</div> */}
                 </div>
               </div>
@@ -126,7 +156,7 @@ export default function CurrencyDetail({ match }) {
               className="seeDescription"
               onClick={() => setIsClicked(!isClicked)}
             >
-              설명보기 ▼
+              설명보기 {isClicked ? seeDescription[0] : seeDescription[1]}
             </article>
             <article className={isClicked ? "clicked" : "notClicked"}>
               {currencyData.description?.ko
