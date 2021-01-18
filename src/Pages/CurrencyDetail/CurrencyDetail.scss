@@ -1,3 +1,10 @@
+@mixin percentVariation {
+  font-size: 15px;
+  font-weight: bold;
+  width: 15%;
+  margin-top: 10px;
+}
+
 .CurrencyDetail {
   width: 900px;
   margin: 0 auto;
@@ -65,13 +72,24 @@
       }
     }
     .currentPrice {
+      display: flex;
       font-size: 25px;
       margin-bottom: 30px;
+      justify-content: flex-end;
       div {
         text-align: end;
         font-weight: bold;
       }
     }
+    .plusPer {
+      @include percentVariation;
+      color: red;
+    }
+    .minusPer {
+      @include percentVariation;
+      color: blue;
+    }
+
     .currencyVolume {
       display: flex;
       text-align: right;
@@ -79,11 +97,19 @@
         width: 200px;
         height: 50px;
         font-size: 13px;
+        .marketCapText {
+          font-weight: bold;
+          margin-bottom: 10px;
+        }
       }
       .dayVolume {
         width: 200px;
         height: 50px;
         font-size: 13px;
+        .dayVolumeText {
+          font-weight: bold;
+          margin-bottom: 10px;
+        }
       }
     }
   }
