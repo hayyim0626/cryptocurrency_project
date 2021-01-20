@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from "react";
 import Loader from "../../Components/Loader/Loader";
-import "./CurrencyDetail.scss";
+import { toast } from "react-toastify";
+import { useSelector, useDispatch } from "react-redux";
+import { addCurrency, deleteCurrency } from "../../Store/actions/";
 import axios from "axios";
+import "./CurrencyDetail.scss";
 
 export default function CurrencyDetail({ match }) {
   const [currencyData, setCurrencyData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
   const [vsCurrency, setVsCurrency] = useState("krw");
+  const [seeDescription, setSeeDescription] = useState(["▲", "▼"]);
+  const bookmarkState = useSelector((store) => store.currencyReducer);
+  const entireData = useSelector((store) => store.dataReducer);
   const VS_CURRENCY = ["KRW 보기", "USD 보기"];
   const coinId = match.params.id;
-  const [seeDescription, setSeeDescription] = useState(["▲", "▼"]);
-
-  const handleVsCurrency = (e) => {
-    setVsCurrency(e.target.value.slice(0, 3).toLowerCase());
-  };
+  const dispatch = useDispatch();
 
   const getApiData = async () => {
     setLoading(true);
@@ -32,8 +34,9 @@ export default function CurrencyDetail({ match }) {
         hourPer:
           response.data.market_data.price_change_percentage_1h_in_currency,
         marketCap: response.data.market_data.market_cap,
-        totalVolume: response.data.market_data.total_volume,
+        volume: response.data.market_data.total_volume,
         description: response.data.description,
+        vsCurrency: vsCurrency,
       };
       setCurrencyData(apiData);
       setLoading(false);
@@ -42,12 +45,31 @@ export default function CurrencyDetail({ match }) {
     }
   };
 
+  const handleVsCurrency = (e) => {
+    setVsCurrency(e.target.value.slice(0, 3).toLowerCase());
+  };
+
+  const handleClick = (id) => {
+    if (bookmarkState.find((data) => data.id === id)) {
+      const remainCurrency = bookmarkState.filter((i) => i.id !== id);
+      dispatch(deleteCurrency(remainCurrency));
+      toast.info(`${id}(이)가 북마크에서 해제되었습니다`, {
+        position: "top-right",
+        autoClose: 1500,
+      });
+    } else {
+      dispatch(addCurrency(currencyData));
+      toast.info(`${id}(이)가 북마크에 추가되었습니다`, {
+        position: "top-right",
+        autoClose: 1500,
+      });
+    }
+  };
+
   useEffect(() => {
     getApiData();
   }, []);
 
-  // console.log(currencyData.hourPer);
-  console.log(currencyData.hourPer?.krw);
   return (
     <>
       {loading ? (
@@ -56,7 +78,13 @@ export default function CurrencyDetail({ match }) {
         <div className="CurrencyDetail">
           <header>
             <div className="currencyInfo">
-              <button className="star">★</button>
+              <button
+                className="star"
+                id={currencyData.id}
+                onClick={(e) => handleClick(e.target.id)}
+              >
+                ★
+              </button>
               <img
                 src={currencyData.image}
                 alt="currency Img"
@@ -137,15 +165,14 @@ export default function CurrencyDetail({ match }) {
                 <div className="dayVolume">
                   <div className="dayVolumeText">24시간 거래대금</div>
                   {vsCurrency === "krw"
-                    ? currencyData.totalVolume?.krw.toLocaleString("ko-KR", {
+                    ? currencyData.volume?.krw.toLocaleString("ko-KR", {
                         style: "currency",
                         currency: "KRW",
                       })
-                    : currencyData.totalVolume?.usd.toLocaleString("en-US", {
+                    : currencyData.volume?.usd.toLocaleString("en-US", {
                         style: "currency",
                         currency: "USD",
                       })}
-                  {/* <div className="">{currencyData.totalVolume[currencyData.symbol.toLowerCase()]}</div> */}
                 </div>
               </div>
             </article>
