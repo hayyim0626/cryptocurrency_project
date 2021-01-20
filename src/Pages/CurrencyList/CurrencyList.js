@@ -40,7 +40,7 @@ export default function CurrencyList() {
           weekPer: Number(el.price_change_percentage_7d_in_currency).toFixed(1),
           volume: el.total_volume,
           rank: el.market_cap_rank,
-          vsCurrency: vsCurrency,
+          vsCurrency,
         }))
         .sort((a, b) => a.rank - b.rank);
       page === 1

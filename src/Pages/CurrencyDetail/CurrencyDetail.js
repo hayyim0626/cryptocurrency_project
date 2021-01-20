@@ -44,7 +44,7 @@ export default function CurrencyDetail({ match }) {
       console.log(error);
     }
   };
-
+  console.log(entireData);
   const handleVsCurrency = (e) => {
     setVsCurrency(e.target.value.slice(0, 3).toLowerCase());
   };
@@ -58,7 +58,8 @@ export default function CurrencyDetail({ match }) {
         autoClose: 1500,
       });
     } else {
-      dispatch(addCurrency(currencyData));
+      const addCurrencyData = entireData.find((data) => data.id === id);
+      dispatch(addCurrency(addCurrencyData));
       toast.info(`${id}(이)가 북마크에 추가되었습니다`, {
         position: "top-right",
         autoClose: 1500,
@@ -79,7 +80,13 @@ export default function CurrencyDetail({ match }) {
           <header>
             <div className="currencyInfo">
               <button
-                className="star"
+                className={
+                  bookmarkState.find(
+                    (entrieData) => entrieData.id === currencyData.id
+                  )
+                    ? "star isClicked"
+                    : "star"
+                }
                 id={currencyData.id}
                 onClick={(e) => handleClick(e.target.id)}
               >
