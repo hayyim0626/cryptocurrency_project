@@ -15,7 +15,6 @@ import Loader from "../../Components/Loader/Loader";
 import "./CurrencyList.scss";
 
 export default function CurrencyList() {
-  const [currencyData, setCurrencyData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [vsCurrency, setVsCurrency] = useState("krw");
   const [perPage, setPerPage] = useState("50");
@@ -40,23 +39,17 @@ export default function CurrencyList() {
           weekPer: Number(el.price_change_percentage_7d_in_currency).toFixed(1),
           volume: el.total_volume,
           rank: el.market_cap_rank,
-          vsCurrency: vsCurrency,
+          vsCurrency,
         }))
         .sort((a, b) => a.rank - b.rank);
       page === 1
         ? dispatch(entireCurrency(apiData))
         : dispatch(entireCurrencyAdd(apiData));
-      // page === 1
-      //   ? setCurrencyData(apiData)
-      //   : setCurrencyData([...currencyData, ...apiData]);
-
       setLoading(false);
     } catch (error) {
       console.log(error);
     }
   };
-  // console.log(currencyData);
-  console.log(entireData);
   useEffect(() => {
     getApiData();
   }, []);
@@ -65,23 +58,6 @@ export default function CurrencyList() {
     getApiData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [vsCurrency, perPage, page]);
-
-  // const handleClick = (id, idx) => {
-  //   if (bookmarkState.find((data) => data.id === id)) {
-  //     const remainCurrency = bookmarkState.filter((i) => i.id !== id);
-  //     dispatch(deleteCurrency(remainCurrency));
-  //     toast.info("북마크가 해제되었습니다", {
-  //       position: "top-right",
-  //       autoClose: 1500,
-  //     });
-  //   } else {
-  //     dispatch(addCurrency(currencyData[idx]));
-  //     toast.info("북마크가 추가되었습니다", {
-  //       position: "top-right",
-  //       autoClose: 1500,
-  //     });
-  //   }
-  // };
 
   const handleClick = (id, idx) => {
     if (bookmarkState.find((data) => data.id === id)) {
