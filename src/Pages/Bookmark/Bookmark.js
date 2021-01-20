@@ -9,7 +9,6 @@ import "./Bookmark.scss";
 export default function Bookmark() {
   const state = useSelector((store) => store.currencyReducer);
   const dispatch = useDispatch();
-  const VS_CURRENCY = ["KRW 보기", "USD 보기"];
 
   const handleClick = (idx) => {
     const currency = state.filter((_, i) => i !== idx);
