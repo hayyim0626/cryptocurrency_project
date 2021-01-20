@@ -38,7 +38,9 @@ export default function Bookmark() {
             >
               ★
             </button>
-            <Link className="name" to={`/currencydetail/${data.id}`}>{data.name}</Link>
+            <Link className="name" to={`/currencydetail/${data.id}`}>
+              {data.name}
+            </Link>
             <li className="symbol">{data.symbol}</li>
             <li className="price">{data.price}</li>
             <li className={data.hourPer.includes("-") ? "minusPer" : "plusPer"}>
@@ -50,7 +52,17 @@ export default function Bookmark() {
             <li className={data.weekPer.includes("-") ? "minusPer" : "plusPer"}>
               {data.weekPer}%
             </li>
-            <li className="volume">{data.volume}</li>
+            <li className="volume">
+              {data.vsCurrency === "krw"
+                ? data.volume.toLocaleString("ko-KR", {
+                    style: "currency",
+                    currency: "KRW",
+                  })
+                : data.volume.toLocaleString("en-US", {
+                    style: "currency",
+                    currency: "USD",
+                  })}
+            </li>
           </ul>
         ))}
     </div>

@@ -3,8 +3,8 @@ import ReactDOM from "react-dom";
 import Routes from "./Routes";
 import { createStore } from "redux";
 import { Provider } from "react-redux";
-import "./Styles/reset.scss";
 import allReducers from './Store/Reducers'
+import "./Styles/reset.scss";
 
 const store = createStore(
   allReducers,
