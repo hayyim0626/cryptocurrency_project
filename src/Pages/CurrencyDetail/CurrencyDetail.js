@@ -184,7 +184,20 @@ export default function CurrencyDetail({ match }) {
               </div>
             </article>
           </content>
-          <content className="priceCalculation"></content>
+          <content className="priceCalculate">
+            <article className="calculateText">가격계산</article>
+            <article className="calculateBox">
+              <div className="currencyPriceCalculate">
+                <span className="currencyId">{currencyData.symbol}</span>
+                <input type="text" className="currencyUnit" />
+              </div>
+              <div className="exchangeMark">⇄</div>
+              <div className="cashPriceCalculate">
+                <span className="nationalCurrency">{vsCurrency.toUpperCase()}</span>
+                <input type="text" className="nationalCurrencyPrice" />
+              </div>
+            </article>
+          </content>
           <content className="description">
             <article
               className="seeDescription"
